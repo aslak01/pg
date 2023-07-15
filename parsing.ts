@@ -1,5 +1,5 @@
-import type { SearchResult } from "./types";
-import { formatDate, parseBytes, parseMagnet } from "./utils";
+import type { SearchResult } from "./types.ts";
+import { formatDate, parseBytes, parseMagnet } from "./utils.ts";
 export function parseItem(item: SearchResult) {
   const { name, seeders, leechers, size, added } = item;
   return {

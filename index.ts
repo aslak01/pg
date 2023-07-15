@@ -2,8 +2,8 @@
 
 import { input, select } from "@inquirer/prompts";
 import { rawlist } from "@inquirer/prompts";
-import { parseItem } from "./parsing";
-import type { SearchResult } from "./types";
+import { parseItem } from "./parsing.ts";
+import type { SearchResult } from "./types.ts";
 
 async function main() {
   console.log("hi mom");
