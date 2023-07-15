@@ -1,15 +1,5 @@
 # pg
 
-To install dependencies:
-
 ```bash
-bun install
+deno run --allow-read --allow-net --allow-env --allow-run index.ts
 ```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v0.6.9. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

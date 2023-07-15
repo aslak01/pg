@@ -1,16 +1,16 @@
 #!/usr/bin/env/ bun
 
 import { input, select } from "@inquirer/prompts";
-import { rawlist } from "@inquirer/prompts";
+import { writeText } from "https://deno.land/x/copy_paste/mod.ts";
+
 import { parseItem } from "./parsing.ts";
 import type { SearchResult } from "./types.ts";
 
 async function main() {
-  console.log("hi mom");
+  console.clear();
 
   let state = "waiting";
 
-  // const search = process.argv.slice(2).join(" ");
   const search = await input({
     message: "which distro are you interested in?",
   });
@@ -19,8 +19,6 @@ async function main() {
     console.log("Please enter a search term");
     return 1;
   }
-
-  console.log("Search was", search);
 
   const baseURL = "https://apibay.org/q.php?q=";
 
@@ -32,25 +30,15 @@ async function main() {
 
   const parsed = data.map((i) => parseItem(i));
 
-  const parseToSelect = (item: typeof parsed[0]) => {
-    const { name, description, value } = item;
-    return {
-      name,
-      description,
-      value,
-    };
-  };
-  const selections = parsed.map(parseToSelect);
-  type Choice = typeof selections[0];
-
-  // console.log(selections.slice(0, 10));
-  console.log("ready to select?");
+  console.clear();
 
   const selection = await select({
     message: "chose a linux distro",
-    choices: selections,
+    choices: parsed,
+    pageSize: 20,
   });
-  console.log(selection);
+  await writeText(selection);
+  console.log("selected", selection);
 }
 
 main();
