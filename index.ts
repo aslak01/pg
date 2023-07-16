@@ -12,7 +12,7 @@ async function searchLoop() {
   console.clear();
 
   const query = await input({
-    message: "which distro are you interested in?",
+    message: "Which distro are you interested in?",
   });
 
   if (query === undefined) {
@@ -33,7 +33,7 @@ async function searchLoop() {
     console.clear();
 
     const selection = select({
-      message: "chose a linux distro",
+      message: "Chose a distro",
       choices: parsed,
       pageSize: 20,
     });
