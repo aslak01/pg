@@ -15,8 +15,9 @@ async function searchLoop() {
     message: "Which distro are you interested in?",
   });
 
-  if (query === undefined) {
+  if (query === undefined || query === "") {
     console.log("Please enter a search term");
+    console.log("Press enter to exit");
     return 1;
   }
 
