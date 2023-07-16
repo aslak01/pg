@@ -13,7 +13,7 @@ jobs:
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
-        deno-version: v1.35.x
+          deno-version: v1.35.x
       - name: Check out repo
         uses: actions/checkout@v3
       - name: Make all
@@ -21,7 +21,7 @@ jobs:
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3
-        with:
+        # with:
         name: pg
         path: pg
 
