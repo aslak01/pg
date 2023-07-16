@@ -1,44 +1,58 @@
-#!/usr/bin/env/ bun
+#!/usr/bin/env/ deno
 
-import { input, select } from "@inquirer/prompts";
+import { input, select } from "npm:@inquirer/prompts";
 import { writeText } from "https://deno.land/x/copy_paste/mod.ts";
+import chalk from "npm:chalk";
+import { oraPromise } from "npm:ora";
 
 import { parseItem } from "./parsing.ts";
 import type { SearchResult } from "./types.ts";
 
-async function main() {
+async function searchLoop() {
   console.clear();
 
-  let state = "waiting";
-
-  const search = await input({
+  const query = await input({
     message: "which distro are you interested in?",
   });
 
-  if (search === undefined) {
+  if (query === undefined) {
     console.log("Please enter a search term");
     return 1;
   }
 
   const baseURL = "https://apibay.org/q.php?q=";
 
-  const q = baseURL + search;
+  const q = baseURL + query;
 
-  const resp = await fetch(q);
-  const data = await resp.json() as SearchResult[];
-  state = "resolved";
+  const resp = await oraPromise(fetch(q));
+  const data = await oraPromise(resp.json()) as SearchResult[];
 
-  const parsed = data.map((i) => parseItem(i));
+  if (data[0].info_hash.split("").some((s: string) => s !== "0")) {
+    const parsed = data.map((i) => parseItem(i));
 
-  console.clear();
+    console.clear();
 
-  const selection = await select({
-    message: "chose a linux distro",
-    choices: parsed,
-    pageSize: 20,
-  });
-  await writeText(selection);
-  console.log("selected", selection);
+    const selection = select({
+      message: "chose a linux distro",
+      choices: parsed,
+      pageSize: 20,
+    });
+
+    const selected = await selection;
+    if (selected) {
+      writeText(selected);
+    }
+
+    console.log("Copied", chalk.green(selected));
+    console.log("Press enter to exit");
+  } else {
+    console.log("No results for", query);
+    console.log("Press enter to exit");
+  }
+}
+
+async function main() {
+  await searchLoop();
 }
 
 main();

@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk from "npm:chalk";
 import type { SearchResult } from "./types.ts";
 
 export function parseMagnet(item: { info_hash: string; name: string }): string {
@@ -35,8 +35,7 @@ export function parseItem(item: SearchResult) {
   const description = `Seeds: ${chalk.green(seeders)}, leechers: ${
     chalk.red(leechers)
   } ${name} 
-${chalk.blue(parseBytes(size))}, added ${chalk.blue(formatDate(added))}
-  }`;
+  ${chalk.blue(parseBytes(size))}, added ${chalk.blue(formatDate(added))}`;
 
   return {
     name: nom,
