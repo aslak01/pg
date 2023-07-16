@@ -19,17 +19,16 @@ jobs:
       - name: Make all
         run: make
 
-  uploading:
-    - uses: actions/upload-artifact@v3
-      with:
-      name: pg
-      path: pg
+      - name: upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+        name: pg
+        path: pg
 
-  publishing:
-    - name: Upload the artifacts
-      uses: skx/github-action-publish-binaries@release-1.3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        releaseId: ${{ needs.create_release.outputs.id }}
-        args: pg
+      - name: publish the artifacts
+        uses: skx/github-action-publish-binaries@release-1.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create_release.outputs.id }}
+          args: pg
