@@ -21,8 +21,6 @@ jobs:
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3
-        # with:
-        name: pg
         path: pg
 
       - name: publish the artifacts
