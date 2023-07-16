@@ -17,4 +17,4 @@ jobs:
      - name: Check out repo
        uses: actions/checkout@v3
      - name: Make all
-       run: make macos
+       run: make
