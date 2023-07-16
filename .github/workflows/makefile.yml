@@ -2,10 +2,10 @@ name: Makefile CI
 
 on:
   push:
-  branches: 
-    - master
-    # tags:
-    # - '*' 
+    branches: 
+      - master
+      # tags:
+      # - '*' 
 
 jobs:
   making:
