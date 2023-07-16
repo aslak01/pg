@@ -6,19 +6,27 @@ on:
   pull_request:
     branches: [ "master" ]
 
-jobs:
- making:
-   runs-on: ubuntu-latest
-   steps:
-     - name: Setup deno
-       uses: denoland/setup-deno@main
-       with:
-         deno-version: v1.35.x
-     - name: Check out repo
-       uses: actions/checkout@v3
-     - name: Make all
-       run: make
-     - uses: actions/upload-artifact@v3
-       with:
-         name: pg
-         path: pg
+  jobs:
+    making:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup deno
+        uses: denoland/setup-deno@main
+        with:
+        deno-version: v1.35.x
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Make all
+        run: make
+      - uses: actions/upload-artifact@v3
+        with:
+        name: pg
+        path: pg
+
+      - name: Upload the artifacts
+        uses: skx/github-action-publish-binaries@release-1.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create_release.outputs.id }}
+          args: pg
