@@ -18,5 +18,5 @@ windows:
 	deno compile --allow-read --allow-net --allow-env --allow-run --target x86_64-pc-windows-msvc index.ts -o pg-win
 
 clean:
-	rm pg
+	rm pg*
 
