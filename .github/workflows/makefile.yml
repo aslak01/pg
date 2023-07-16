@@ -13,7 +13,7 @@ jobs:
      - name: Setup deno
        uses: denoland/setup-deno@main
        with:
-         deno-version: v1.29.x
+         deno-version: v1.35.x
      - name: Check out repo
        uses: actions/checkout@v3
      - name: Make all
