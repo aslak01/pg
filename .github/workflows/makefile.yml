@@ -1,20 +1,20 @@
 name: Makefile CI
 
- on:
-   push:
-     branches: [ "master" ]
-   pull_request:
-     branches: [ "master" ]
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
- jobs:
-  scheduled:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup deno
-        uses: denoland/setup-deno@main
-        with:
-          deno-version: v1.29.x
-      - name: Check out repo
-        uses: actions/checkout@v3
-      - name: Make all
-        run: make
+jobs:
+ scheduled:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Setup deno
+       uses: denoland/setup-deno@main
+       with:
+         deno-version: v1.29.x
+     - name: Check out repo
+       uses: actions/checkout@v3
+     - name: Make all
+       run: make
