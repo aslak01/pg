@@ -19,7 +19,7 @@ jobs:
       - name: Make all
         run: make
 
-      - name: upload artifacts
+      - name: pg
         uses: actions/upload-artifact@v3
         path: pg
 
