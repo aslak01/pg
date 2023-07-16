@@ -19,6 +19,6 @@ jobs:
      - name: Make all
        run: make
      - uses: actions/upload-artifact@v3
-        with:
-          name: pg
-          path: releases/pg
+       with:
+         name: pg
+         path: releases/pg
