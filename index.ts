@@ -1,6 +1,8 @@
 #!/usr/bin/env/ deno
 
-import { input, select } from "npm:@inquirer/prompts";
+// import { input, select } from "npm:@inquirer/prompts";
+import input from "npm:@inquirer/input";
+import select from "npm:@inquirer/select";
 import { writeText } from "https://deno.land/x/copy_paste/mod.ts";
 import chalk from "npm:chalk";
 import { oraPromise } from "npm:ora";
