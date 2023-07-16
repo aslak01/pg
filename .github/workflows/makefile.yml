@@ -10,6 +10,8 @@ on:
 jobs:
   making:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Setup deno
         uses: denoland/setup-deno@main
