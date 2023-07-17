@@ -51,7 +51,7 @@ jobs:
           echo '    bin.install "pg"' >> pg.rb
           echo "  end" >> pg.rb
           echo "end" >> pg.rb
-          cp pg.rb ./brew-stuff/formulas/
+          cp pg.rb ./brew-stuff/Formula/
 
       - name: Push formula
         run: |
