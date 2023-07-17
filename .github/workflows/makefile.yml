@@ -9,7 +9,7 @@ jobs:
   making:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.compile.outputs.chsum }}
+      checksum: ${{ steps.compile.outputs.chsum }}
     steps:
 
       - name: Check out repo
@@ -25,7 +25,7 @@ jobs:
         run: | 
           deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
           # checksum=$(shasum -a 256 pg
-          checksum=$(sha256sum pg | awk '{print $1}')
+          checksum=$(sha256sum pg | cut -d' ' -f1)
           echo "chsum=${checksum}" >> "$GITHUB_OUTPUT"
           tar -czvf pg.tar.gz pg
 
@@ -50,7 +50,7 @@ jobs:
           echo '  desc "A cli tool to search for linux distros"' >> pg.rb
           echo '  homepage "https://github.com/aslak01/pg"' >> pg.rb
           echo '  url "https://github.com/aslak01/pg/releases/download/'${GITHUB_REF#refs/tags/}'/pg.tar.gz"' >> pg.rb
-          echo '  sha256 "'${{ steps.compile.output.chsum }}'"' >> pg.rb
+          echo '  sha256 "'${{ steps.compile.outputs.checksum }}'"' >> pg.rb
           echo '  license "MIT"' >> pg.rb
           echo "" >> pg.rb
           echo "  def install" >> pg.rb
