@@ -6,6 +6,7 @@ on:
     #   - master
     tags:
     - '*' 
+    # tagging this
 
 jobs:
   making:
