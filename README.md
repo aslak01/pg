@@ -1,5 +1,11 @@
 # pg
 
+install with homebrew (arm macs only):
+
+```bash
+brew install aslak01/stuff/pg
+```
+
 test:
 
 ```bash

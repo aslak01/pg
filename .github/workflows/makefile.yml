@@ -22,7 +22,6 @@ jobs:
         id: compile_step
         run: | 
           deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
-          # checksum=$(shasum -a 256 pg
           tar -czvf pg.tar.gz pg
           checksum=$(sha256sum pg.tar.gz | cut -d' ' -f1)
           echo "checksum was" ${checksum}
@@ -40,8 +39,6 @@ jobs:
           token: ${{ secrets.TAP_GITHUB_TOKEN }}
           ref: master
           path: ./brew-stuff
-
-      # https://github.com/aslak01/pg/releases/download/${GITHUB_REF#refs/tags/}/pg.tar.gz
 
       - name: Update Homebrew Formula
         run: |
