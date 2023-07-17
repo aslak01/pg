@@ -2,11 +2,8 @@ name: Makefile CI
 
 on:
   push:
-    # branches: 
-    #   - master
     tags:
     - '*' 
-    # tagging this
 
 jobs:
   making:
@@ -24,15 +21,7 @@ jobs:
       - name: Make binary
         run: make
 
-      # - name: Create a Release
-      #   uses: elgohr/Github-Release-Action@v4
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      #   with:
-      #     title: triggeredRelease
-
       - name: Release
         uses: softprops/action-gh-release@v1
-        # if: startsWith(github.ref, 'refs/tags/')
         with:
           files: pg
