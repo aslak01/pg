@@ -49,12 +49,12 @@ jobs:
         env: 
           CHECKSUM: ${{ steps.compile.outputs.checksum }}
         run: |
-          echo "compiled checksum": $CHECKSUM
+          echo "compiled checksum": "$CHECKSUM"
           echo "class Pg < Formula" >> pg.rb
           echo '  desc "A cli tool to search for linux distros"' >> pg.rb
           echo '  homepage "https://github.com/aslak01/pg"' >> pg.rb
           echo '  url "https://github.com/aslak01/pg/releases/download/'${GITHUB_REF#refs/tags/}'/pg.tar.gz"' >> pg.rb
-          echo '  sha256 "'$CHECKSUM'"' >> pg.rb
+          echo '  sha256 "'"$CHECKSUM"'"' >> pg.rb
           echo '  license "MIT"' >> pg.rb
           echo "" >> pg.rb
           echo "  def install" >> pg.rb
