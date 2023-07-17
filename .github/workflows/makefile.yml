@@ -35,12 +35,37 @@ jobs:
             pg.tar.gz
             # pg-${GITHUB_REF#refs/tags/}"
 
+      - name: Clone Homebrew Repository
+        uses: actions/checkout@v3
+        with:
+          repository: aslak01/homebrew-stuff
+          token: ${{ secrets.TAP_GITHUB_TOKEN }}
+          ref: master
+          path: ./brew-stuff
 
-      # - name: Set up Ruby
-      #   uses: actions/setup-ruby@v1
-      #   with:
-      #     ruby-version: 3.2.x
-      #
-      # - name: Update Homebrew Formula
-      #   run: |
-      #     
+      # https://github.com/aslak01/pg/releases/download/${GITHUB_REF#refs/tags/}/pg.tar.gz
+
+      - name: Update Homebrew Formula
+        run: |
+          echo "class Pg < Formula" >> pg.rb
+          echo "  desc 'A cli tool to search for linux distros'" >> pg.rb
+          echo "  homepage 'https://github.com/aslak01/pg'" >> pg.rb
+          echo "  url 'https://github.com/aslak01/pg/releases/download/'${GITHUB_REF#refs/tags/}'/pg.tar.gz'" >> pg.rb
+          echo "  sha256 ${{ github.sha }}" >> pg.rb
+          echo "  license 'MIT'" >> pg.rb
+          echo "" >> pg.rb
+          echo "  def install" >> pg.rb
+          echo "    bin.install 'pg'" >> pg.rb
+          echo "  end" >> pg.rb
+          echo "end" >> pg.rb
+          cp pg.rb ./brew-stuff/formulas/
+
+      - name: Push formula
+        run: |
+          cd ./brew-stuff
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "formula update pg ${GITHUB_REF#refs/tags/}"
+          git push
+
