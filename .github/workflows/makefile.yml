@@ -5,10 +5,6 @@ on:
     tags:
     - '*' 
 
-env: 
-  VERSION: ${{ steps.extract_version.outputs.version }}
-  SHA: ${{ github.sha }}
-
 jobs:
   making:
     runs-on: ubuntu-latest
@@ -22,11 +18,18 @@ jobs:
         with:
           deno-version: v1.35.x
 
+      - name: Extract Version from Tag
+        id: extract_version
+        run: |
+          echo "::set-output name=version::$(echo ${GITHUB_REF#refs/tags/})"
+
       - name: Make binary
-        run: deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg-"$VERSION"
+        run: |
+          new_version="${{ steps.extract_version.outputs.version }}"
+          deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg-${new_version}
 
       - name: Check SHA
-        run: echo "$SHA" > Release.txt
+        run: echo ${{ github.sha }} > Release.txt
         run: cat Release.txt
 
       - name: Release
