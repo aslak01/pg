@@ -18,15 +18,8 @@ jobs:
         with:
           deno-version: v1.35.x
 
-      - name: Extract Version from Tag
-        id: extract_version
-        run: |
-          echo "::set-output name=version::$(echo ${GITHUB_REF#refs/tags/})"
-
       - name: Make binary
-        run: |
-          new_version="${{ steps.extract_version.outputs.version }}"
-          deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg-${new_version}
+        run: deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg-${GITHUB_REF#refs/tags/}
 
       - name: Check SHA
         run: |
@@ -36,7 +29,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: pg
+          files: pg-${GITHUB_REF#refs/tags/}
 
       # - name: Set up Ruby
       #   uses: actions/setup-ruby@v1
