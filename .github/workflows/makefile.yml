@@ -18,22 +18,15 @@ jobs:
         with:
           deno-version: v1.35.x
 
-      - name: Make binary
-        run: deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
-
-      - name: Check SHA
-        run: |
+      - name: Make and tar binary
+        run: | 
+          deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
           tar -czvf pg.tar.gz pg
-          echo ${{ github.sha }} > Release.txt
-          cat Release.txt
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with: 
-          files: | 
-            pg
-            pg.tar.gz
-            # pg-${GITHUB_REF#refs/tags/}"
+          files: pg.tar.gz
 
       - name: Clone Homebrew Repository
         uses: actions/checkout@v3
