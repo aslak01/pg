@@ -29,8 +29,9 @@ jobs:
           deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg-${new_version}
 
       - name: Check SHA
-        run: echo ${{ github.sha }} > Release.txt
-        run: cat Release.txt
+        run: |
+          echo ${{ github.sha }} > Release.txt
+          cat Release.txt
 
       - name: Release
         uses: softprops/action-gh-release@v1
