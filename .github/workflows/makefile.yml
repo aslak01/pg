@@ -19,7 +19,7 @@ jobs:
           deno-version: v1.35.x
 
       - name: Make binary
-        run: deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg-${GITHUB_REF#refs/tags/}
+        run: deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
 
       - name: Check SHA
         run: |
@@ -28,8 +28,12 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        with:
-          files: pg-${GITHUB_REF#refs/tags/}
+        with: 
+          files: | 
+            Release.txt
+            pg
+            # pg-${GITHUB_REF#refs/tags/}"
+
 
       # - name: Set up Ruby
       #   uses: actions/setup-ruby@v1
