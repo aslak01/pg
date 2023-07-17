@@ -23,6 +23,7 @@ jobs:
 
       - name: Check SHA
         run: |
+          tar -czvf pg.tar.gz pg
           echo ${{ github.sha }} > Release.txt
           cat Release.txt
 
@@ -30,8 +31,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with: 
           files: | 
-            Release.txt
             pg
+            pg.tar.gz
             # pg-${GITHUB_REF#refs/tags/}"
 
 
