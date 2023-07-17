@@ -23,10 +23,10 @@ jobs:
         run: | 
           deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
           # checksum=$(shasum -a 256 pg
-          checksum=$(sha256sum pg | cut -d' ' -f1)
+          tar -czvf pg.tar.gz pg
+          checksum=$(sha256sum pg.tar.gz | cut -d' ' -f1)
           echo "checksum was" ${checksum}
           echo "CHSUM=${checksum}" >> "$GITHUB_ENV"
-          tar -czvf pg.tar.gz pg
 
       - name: Release
         uses: softprops/action-gh-release@v1
