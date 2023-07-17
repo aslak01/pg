@@ -27,7 +27,7 @@ jobs:
           files: pg
 
       - name: Update Homebrew Formula
-        uses: izumin5210/action-homebrew-tap@master
+        uses: izumin5210/action-homebrew-tap@v1
         with:
           tap: aslak01/homebrew-stuff
           token: ${{ secrets.GITHUB_TOKEN }}
