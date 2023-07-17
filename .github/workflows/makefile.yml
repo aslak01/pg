@@ -26,6 +26,10 @@ jobs:
           checksum=$(sha256sum pg.tar.gz | cut -d' ' -f1)
           echo "checksum was" ${checksum}
           echo "CHSUM=${checksum}" >> "$GITHUB_ENV"
+          checksum2=$(sha256sum ${GITHUB_REF#refs/tags/}.tar.gz
+          echo "checksums"
+          echo ${checksum2}
+          echo ${{ github.checksum}} 
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -39,6 +43,9 @@ jobs:
           token: ${{ secrets.TAP_GITHUB_TOKEN }}
           ref: master
           path: ./brew-stuff
+
+          # source link:
+        # https://github.com/aslak01/pg/archive/refs/tags/1.1.27.tar.gz
 
       - name: Update Homebrew Formula
         run: |
