@@ -25,3 +25,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: pg
+
+      - name: Update Homebrew Formula
+        uses: izumin5210/action-homebrew-tap@releases/v0
+        with:
+          tap: aslak01/homebrew-stuff
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tap-token: ${{ secrets.TAP_GITHUB_TOKEN }}
+        if: startsWith(github.ref, 'refs/tags/')
