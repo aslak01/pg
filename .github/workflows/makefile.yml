@@ -24,7 +24,8 @@ jobs:
         id: compile
         run: | 
           deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
-          echo "chsum=${shasum -a 256 pg}" >> "$GITHUB_OUTPUT"
+          checksum=shasum -a 256 pg
+          echo "chsum=${checksum}" >> "$GITHUB_OUTPUT"
           tar -czvf pg.tar.gz pg
 
       - name: Release
