@@ -26,17 +26,15 @@ jobs:
           checksum=$(sha256sum pg.tar.gz | cut -d' ' -f1)
           echo "checksum was" ${checksum}
           echo "CHSUM=${checksum}" >> "$GITHUB_ENV"
-          checksum2=$(sha256sum ${GITHUB_REF#refs/tags/}.tar.gz)
-          echo "checksums"
-          echo ${checksum2}
-          echo ${{ github.checksum}} 
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with: 
-          files: pg.tar.gz
+          files: |
+            pg
+            pg.tar.gz
 
-      - name: Clone Homebrew Repository
+      - name: Clone Homebrew Repo
         uses: actions/checkout@v3
         with:
           repository: aslak01/homebrew-stuff
@@ -50,6 +48,7 @@ jobs:
       - name: Update Homebrew Formula
         run: |
           echo "compiled checksum": $CHSUM
+          echo "github checksum": ${{ github.checksum }}
           echo "class Pg < Formula" >> pg.rb
           echo '  desc "A cli tool to search for linux distros"' >> pg.rb
           echo '  homepage "https://github.com/aslak01/pg"' >> pg.rb
@@ -63,7 +62,7 @@ jobs:
           echo "end" >> pg.rb
           cp pg.rb ./brew-stuff/Formula/
 
-      - name: Push formula
+      - name: Push Brew formula
         run: |
           cd ./brew-stuff
           git add .
