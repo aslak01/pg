@@ -1,11 +1,11 @@
 #!/usr/bin/env/ deno
 
-// import { input, select } from "npm:@inquirer/prompts";
-import input from "npm:@inquirer/input";
-import select from "npm:@inquirer/select";
-import { writeText } from "https://deno.land/x/copy_paste/mod.ts";
-import chalk from "npm:chalk";
-import { oraPromise } from "npm:ora";
+import input from "@inquirer/input";
+import select from "@inquirer/select";
+import chalk from "chalk";
+import { oraPromise } from "ora";
+import { clipboard } from "clipboard";
+import { Command } from "cliffy";
 
 import { parseItem } from "./parsing.ts";
 import type { SearchResult } from "./types.ts";
@@ -43,7 +43,8 @@ async function searchLoop() {
 
     const selected = await selection;
     if (selected) {
-      writeText(selected);
+      console.log(selected);
+      return;
     }
 
     console.log("Copied", chalk.green(selected));
