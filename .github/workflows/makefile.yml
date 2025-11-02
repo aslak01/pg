@@ -21,7 +21,7 @@ jobs:
       - name: Make and tar binary
         id: compile_step
         run: |
-          deno compile --allow-read --allow-net --allow-env --target aarch64-apple-darwin index.ts -o pg
+          deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
           tar -czvf pg.tar.gz pg
           checksum=$(sha256sum pg.tar.gz | cut -d' ' -f1)
           echo "checksum was" ${checksum}
