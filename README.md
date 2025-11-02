@@ -17,11 +17,11 @@ download latest release source zip or clone repo
 test:
 
 ```bash
-deno run --allow-read --allow-net --allow-env --allow-run index.ts
+deno run --allow-read --allow-net --allow-env index.ts
 ```
 
 compile a binary:
 
 ```bash
-deno compile --allow-read --allow-net --allow-env --allow-run index.ts
+deno compile --allow-read --allow-net --allow-env index.ts
 ```

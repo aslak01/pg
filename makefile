@@ -1,8 +1,9 @@
-.PHONY: compile
+.PHONY: compile clean
 
 compile:
-	deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts
+	deno compile --allow-read --allow-net --allow-env --target aarch64-apple-darwin index.ts
 
 clean:
-	rm pg*
+	rm -f pg
+	rm -f pg.tar.gz
 

@@ -11,17 +11,17 @@ jobs:
     steps:
 
       - name: Check out repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
-          deno-version: v1.35.x
+          deno-version: v2.x
 
       - name: Make and tar binary
         id: compile_step
-        run: | 
-          deno compile --allow-read --allow-net --allow-env --allow-run --target aarch64-apple-darwin index.ts -o pg
+        run: |
+          deno compile --allow-read --allow-net --allow-env --target aarch64-apple-darwin index.ts -o pg
           tar -czvf pg.tar.gz pg
           checksum=$(sha256sum pg.tar.gz | cut -d' ' -f1)
           echo "checksum was" ${checksum}
@@ -35,7 +35,7 @@ jobs:
             pg.tar.gz
 
       - name: Clone Homebrew Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: aslak01/homebrew-stuff
           token: ${{ secrets.TAP_GITHUB_TOKEN }}
@@ -48,7 +48,6 @@ jobs:
       - name: Update Homebrew Formula
         run: |
           echo "compiled checksum": $CHSUM
-          echo "github checksum": ${{ github.checksum }}
           echo "class Pg < Formula" >> pg.rb
           echo '  desc "A cli tool to search for linux distros"' >> pg.rb
           echo '  homepage "https://github.com/aslak01/pg"' >> pg.rb
@@ -66,8 +65,8 @@ jobs:
         run: |
           cd ./brew-stuff
           git add .
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config --local user.name github-actions
+          git config --local user.email github-actions@github.com
           git commit -am "formula update pg ${GITHUB_REF#refs/tags/}"
           git push
 
