@@ -38,7 +38,8 @@ jobs:
         with:
           repository: aslak01/homebrew-stuff
           token: ${{ secrets.TAP_GITHUB_TOKEN }}
-          ref: master
+          ref: refs/heads/master
+          fetch-depth: 1
           path: ./brew-stuff
       - name: Configure Git for push
         run: |
