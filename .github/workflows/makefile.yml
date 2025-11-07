@@ -38,9 +38,7 @@ jobs:
           git clone https://aslak01:${{ secrets.TAP_GITHUB_TOKEN }}@github.com/aslak01/homebrew-stuff.git brew-stuff
           cd brew-stuff
           git checkout master
-      - name: Configure Git for Homebrew pushes
-        run: |
-          git config --global url."https://${{ secrets.TAP_GITHUB_TOKEN }}:@github.com/".insteadOf "https://github.com/"
+
       - name: Update Homebrew Formula
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
@@ -76,6 +74,7 @@ jobs:
             end
           end
           EOF
+
       - name: Push Brew formula
         run: |
           cd ./brew-stuff
@@ -83,4 +82,6 @@ jobs:
           git config --local user.name github-actions
           git config --local user.email github-actions@github.com
           git commit -m "formula update pg ${GITHUB_REF#refs/tags/}" || echo "No changes to commit"
+          git config --global credential.helper store
+          git config --global url."https://${{ secrets.TAP_GITHUB_TOKEN }}:@github.com/".insteadOf "https://github.com/"
           git push origin master
