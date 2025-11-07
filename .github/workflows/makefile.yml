@@ -34,16 +34,10 @@ jobs:
             pg.tar.gz
 
       - name: Clone Homebrew Repo
-        uses: actions/checkout@v4
-        with:
-          repository: aslak01/homebrew-stuff
-          token: ${{ secrets.TAP_GITHUB_TOKEN }}
-          ref: refs/heads/master
-          fetch-depth: 1
-          path: ./brew-stuff
-      - name: Configure Git for push
         run: |
-          git config --global url."https://${{ secrets.TAP_GITHUB_TOKEN }}:@github.com/".insteadOf "https://github.com/"
+          git clone https://aslak01:${{ secrets.TAP_GITHUB_TOKEN }}@github.com/aslak01/homebrew-stuff.git brew-stuff
+          cd brew-stuff
+          git checkout master
 
       - name: Update Homebrew Formula
         run: |
