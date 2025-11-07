@@ -3,13 +3,12 @@ name: Makefile CI
 on:
   push:
     tags:
-    - '*' 
+      - "*"
 
 jobs:
   making:
     runs-on: ubuntu-latest
     steps:
-
       - name: Check out repo
         uses: actions/checkout@v4
 
@@ -29,7 +28,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        with: 
+        with:
           files: |
             pg
             pg.tar.gz
@@ -41,32 +40,50 @@ jobs:
           token: ${{ secrets.TAP_GITHUB_TOKEN }}
           ref: master
           path: ./brew-stuff
-
-          # source link:
-        # https://github.com/aslak01/pg/archive/refs/tags/1.1.27.tar.gz
+      - name: Configure Git for push
+        run: |
+          git config --global url."https://${{ secrets.TAP_GITHUB_TOKEN }}:@github.com/".insteadOf "https://github.com/"
 
       - name: Update Homebrew Formula
         run: |
-          echo "compiled checksum": $CHSUM
-          echo "class Pg < Formula" >> pg.rb
-          echo '  desc "A cli tool to search for linux distros"' >> pg.rb
-          echo '  homepage "https://github.com/aslak01/pg"' >> pg.rb
-          echo '  url "https://github.com/aslak01/pg/releases/download/'${GITHUB_REF#refs/tags/}'/pg.tar.gz"' >> pg.rb
-          echo '  sha256 "'"$CHSUM"'"' >> pg.rb
-          echo '  license "MIT"' >> pg.rb
-          echo "" >> pg.rb
-          echo "  def install" >> pg.rb
-          echo '    bin.install "pg"' >> pg.rb
-          echo "  end" >> pg.rb
-          echo "end" >> pg.rb
-          cp pg.rb ./brew-stuff/Formula/
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "Building formula for version: $TAG"
+          echo "Compiled checksum: $CHSUM"
+          mkdir -p ./brew-stuff/Formula
+          # Versioned formula (pg@1.1.27.rb)
+          cat > ./brew-stuff/Formula/pg@${TAG}.rb <<EOF
+          class PgAT${TAG//./_} < Formula
+            desc "A cli tool to search for linux distros"
+            homepage "https://github.com/aslak01/pg"
+            url "https://github.com/aslak01/pg/releases/download/${TAG}/pg.tar.gz"
+            sha256 "$CHSUM"
+            license "MIT"
 
+            def install
+              bin.install "pg"
+            end
+          end
+          EOF
+
+          # Main formula (pg.rb) -> always points to latest
+          cat > ./brew-stuff/Formula/pg.rb <<EOF
+          class Pg < Formula
+            desc "A cli tool to search for linux distros"
+            homepage "https://github.com/aslak01/pg"
+            url "https://github.com/aslak01/pg/releases/download/${TAG}/pg.tar.gz"
+            sha256 "$CHSUM"
+            license "MIT"
+
+            def install
+              bin.install "pg"
+            end
+          end
+          EOF
       - name: Push Brew formula
         run: |
           cd ./brew-stuff
-          git add .
+          git add Formula/
           git config --local user.name github-actions
           git config --local user.email github-actions@github.com
-          git commit -am "formula update pg ${GITHUB_REF#refs/tags/}"
-          git push
-
+          git commit -m "formula update pg ${GITHUB_REF#refs/tags/}" || echo "No changes to commit"
+          git push origin master
