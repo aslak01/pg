@@ -74,18 +74,18 @@ jobs:
             end
           end
           EOF
-
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.BREW_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
       - name: Push Brew formula
-        env:
-          GIT_ASKPASS: /bin/echo
-          GIT_USERNAME: x-access-token
-          GIT_PASSWORD: ${{ secrets.TAP_GITHUB_TOKEN }}
-
         run: |
           cd ./brew-stuff
           git add Formula/
           git config --local user.name github-actions
           git config --local user.email github-actions@github.com
           git commit -m "formula update pg ${GITHUB_REF#refs/tags/}" || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${{ secrets.TAP_GITHUB_TOKEN }}@github.com/aslak01/homebrew-stuff.git
+          git remote set-url origin git@github.com:aslak01/homebrew-stuff.git
           git push origin master
