@@ -8,6 +8,7 @@ import {
   isEnterKey,
   Separator,
 } from "npm:@inquirer/core";
+
 import chalk from "npm:chalk";
 import figures from "npm:figures";
 import ansiEscapes from "npm:ansi-escapes";
@@ -128,13 +129,17 @@ export default createPrompt(
     const handleSelection = () => {
       if (status !== "pending" || filteredChoices.length === 0) return;
       const selectedChoice = filteredChoices[cursorPosition];
-      if (selectedChoice && isSelectable(selectedChoice)) {
+      if (
+        selectedChoice &&
+        isSelectable(selectedChoice) &&
+        selectedChoice.value
+      ) {
         setStatus("done");
         done({ type: "selected", value: selectedChoice.value });
       }
     };
 
-    useKeypress((key: any, rl: any) => {
+    useKeypress((key: any) => {
       // Normalize key detection for consistent handling
       const isSlashKey =
         key.name === "slash" || key.sequence === "/" || key.name === "/";
@@ -327,28 +332,33 @@ export default createPrompt(
             ? chalk.dim("\n  Press Backspace to modify search or Esc to clear")
             : "")
         : visibleChoices
-            .map((choice, index) => {
-              const actualIndex = startIndex + index;
-              if (Separator.isSeparator(choice)) {
-                return ` ${choice.separator}`;
-              }
+            .map(
+              (
+                choice,
+                index: number,
+              ) => {
+                const actualIndex = startIndex + index;
+                if (Separator.isSeparator(choice)) {
+                  return ` ${choice.separator}`;
+                }
 
-              const isActive = actualIndex === cursorPosition;
-              const name = choice.name || String(choice.value);
+                const isActive = actualIndex === cursorPosition;
+                const name = choice.name || String(choice.value);
 
-              if (choice.disabled) {
-                const disabledLabel =
-                  typeof choice.disabled === "string"
-                    ? choice.disabled
-                    : "(disabled)";
-                return chalk.dim(`  ${name} ${disabledLabel}`);
-              }
+                if (choice.disabled) {
+                  const disabledLabel =
+                    typeof choice.disabled === "string"
+                      ? choice.disabled
+                      : "(disabled)";
+                  return chalk.dim(`  ${name} ${disabledLabel}`);
+                }
 
-              const cursor = isActive ? figures.pointer : " ";
-              const color = isActive ? chalk.cyan : (x: string) => x;
+                const cursor = isActive ? figures.pointer : " ";
+                const color = isActive ? chalk.cyan : (x: string) => x;
 
-              return color(`${cursor} ${name}`);
-            })
+                return color(`${cursor} ${name}`);
+              },
+            )
             .join("\n");
 
     // Show count info
